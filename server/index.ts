@@ -1,7 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { handleSendEmail, handleEmailHistory, handleEmailTest } from "./routes/email";
+import {
+  handleSendEmail,
+  handleEmailHistory,
+  handleEmailTest,
+} from "./routes/email";
 
 export function createServer() {
   const app = express();

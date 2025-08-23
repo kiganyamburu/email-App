@@ -20,6 +20,7 @@ FROM_EMAIL="Your App Name <noreply@yourdomain.com>"
 ## Popular SMTP Providers
 
 ### Gmail
+
 ```bash
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
@@ -28,6 +29,7 @@ SMTP_PASS=your-app-password  # Use App Password, not regular password
 ```
 
 ### Outlook/Hotmail
+
 ```bash
 SMTP_HOST=smtp-mail.outlook.com
 SMTP_PORT=587
@@ -36,6 +38,7 @@ SMTP_PASS=your-password
 ```
 
 ### SendGrid
+
 ```bash
 SMTP_HOST=smtp.sendgrid.net
 SMTP_PORT=587
@@ -44,6 +47,7 @@ SMTP_PASS=your-sendgrid-api-key
 ```
 
 ### Mailgun
+
 ```bash
 SMTP_HOST=smtp.mailgun.org
 SMTP_PORT=587

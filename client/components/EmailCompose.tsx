@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Label } from './ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Switch } from './ui/switch';
-import { Badge } from './ui/badge';
-import { X, Send, Plus, Mail } from 'lucide-react';
-import { toast } from 'sonner';
-import { SendEmailRequest, SendEmailResponse } from '@shared/api';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Switch } from "./ui/switch";
+import { Badge } from "./ui/badge";
+import { X, Send, Plus, Mail } from "lucide-react";
+import { toast } from "sonner";
+import { SendEmailRequest, SendEmailResponse } from "@shared/api";
 
 const emailSchema = z.object({
-  recipients: z.array(z.string().email('Invalid email address')).min(1, 'At least one recipient is required'),
-  subject: z.string().min(1, 'Subject is required').max(200, 'Subject too long'),
-  message: z.string().min(1, 'Message is required'),
-  template: z.enum(['none', 'notification', 'password-reset']).default('none'),
+  recipients: z
+    .array(z.string().email("Invalid email address"))
+    .min(1, "At least one recipient is required"),
+  subject: z
+    .string()
+    .min(1, "Subject is required")
+    .max(200, "Subject too long"),
+  message: z.string().min(1, "Message is required"),
+  template: z.enum(["none", "notification", "password-reset"]).default("none"),
   isHtml: z.boolean().default(false),
 });
 
@@ -26,7 +43,7 @@ type EmailFormData = z.infer<typeof emailSchema>;
 
 export const EmailCompose: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [recipientInput, setRecipientInput] = useState('');
+  const [recipientInput, setRecipientInput] = useState("");
 
   const {
     register,
@@ -39,43 +56,46 @@ export const EmailCompose: React.FC = () => {
     resolver: zodResolver(emailSchema),
     defaultValues: {
       recipients: [],
-      subject: '',
-      message: '',
-      template: 'none',
+      subject: "",
+      message: "",
+      template: "none",
       isHtml: false,
     },
   });
 
-  const recipients = watch('recipients');
-  const template = watch('template');
-  const isHtml = watch('isHtml');
+  const recipients = watch("recipients");
+  const template = watch("template");
+  const isHtml = watch("isHtml");
 
   const addRecipient = () => {
     if (recipientInput.trim()) {
       const email = recipientInput.trim();
       if (recipients.includes(email)) {
-        toast.error('Email already added');
-        return;
-      }
-      
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        toast.error('Invalid email format');
+        toast.error("Email already added");
         return;
       }
 
-      setValue('recipients', [...recipients, email]);
-      setRecipientInput('');
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error("Invalid email format");
+        return;
+      }
+
+      setValue("recipients", [...recipients, email]);
+      setRecipientInput("");
     }
   };
 
   const removeRecipient = (email: string) => {
-    setValue('recipients', recipients.filter(r => r !== email));
+    setValue(
+      "recipients",
+      recipients.filter((r) => r !== email),
+    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       addRecipient();
     }
@@ -89,13 +109,13 @@ export const EmailCompose: React.FC = () => {
         subject: data.subject,
         message: data.message,
         isHtml: data.isHtml,
-        template: data.template !== 'none' ? data.template : undefined,
+        template: data.template !== "none" ? data.template : undefined,
       };
 
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
+      const response = await fetch("/api/send-email", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       });
@@ -103,23 +123,23 @@ export const EmailCompose: React.FC = () => {
       const result: SendEmailResponse = await response.json();
 
       if (result.success) {
-        toast.success('Email sent successfully!');
+        toast.success("Email sent successfully!");
         reset();
       } else {
         toast.error(`Failed to send email: ${result.message}`);
       }
     } catch (error) {
-      toast.error('Network error occurred');
-      console.error('Email sending error:', error);
+      toast.error("Network error occurred");
+      console.error("Email sending error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const templateDescriptions = {
-    none: 'Custom email content',
-    notification: 'Automated notification template',
-    'password-reset': 'Password reset template with secure styling',
+    none: "Custom email content",
+    notification: "Automated notification template",
+    "password-reset": "Password reset template with secure styling",
   };
 
   return (
@@ -158,12 +178,16 @@ export const EmailCompose: React.FC = () => {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            
+
             {/* Recipients list */}
             {recipients.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {recipients.map((email, index) => (
-                  <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
                     {email}
                     <Button
                       type="button"
@@ -178,9 +202,11 @@ export const EmailCompose: React.FC = () => {
                 ))}
               </div>
             )}
-            
+
             {errors.recipients && (
-              <p className="text-sm text-destructive">{errors.recipients.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.recipients.message}
+              </p>
             )}
           </div>
 
@@ -189,7 +215,7 @@ export const EmailCompose: React.FC = () => {
             <Label htmlFor="template">Email Template</Label>
             <Select
               value={template}
-              onValueChange={(value) => setValue('template', value as any)}
+              onValueChange={(value) => setValue("template", value as any)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a template" />
@@ -210,16 +236,18 @@ export const EmailCompose: React.FC = () => {
             <Label htmlFor="subject">Subject</Label>
             <Input
               id="subject"
-              {...register('subject')}
+              {...register("subject")}
               placeholder={
-                template === 'password-reset' 
-                  ? 'Subject will be auto-generated' 
-                  : 'Enter email subject'
+                template === "password-reset"
+                  ? "Subject will be auto-generated"
+                  : "Enter email subject"
               }
-              disabled={template === 'password-reset'}
+              disabled={template === "password-reset"}
             />
             {errors.subject && (
-              <p className="text-sm text-destructive">{errors.subject.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.subject.message}
+              </p>
             )}
           </div>
 
@@ -228,27 +256,29 @@ export const EmailCompose: React.FC = () => {
             <Label htmlFor="message">Message</Label>
             <Textarea
               id="message"
-              {...register('message')}
+              {...register("message")}
               placeholder={
-                template === 'password-reset'
-                  ? 'Enter the password reset link'
-                  : 'Enter your email message'
+                template === "password-reset"
+                  ? "Enter the password reset link"
+                  : "Enter your email message"
               }
               rows={8}
               className="resize-none"
             />
             {errors.message && (
-              <p className="text-sm text-destructive">{errors.message.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.message.message}
+              </p>
             )}
           </div>
 
           {/* HTML Toggle */}
-          {template === 'none' && (
+          {template === "none" && (
             <div className="flex items-center space-x-2">
               <Switch
                 id="isHtml"
                 checked={isHtml}
-                onCheckedChange={(checked) => setValue('isHtml', checked)}
+                onCheckedChange={(checked) => setValue("isHtml", checked)}
               />
               <Label htmlFor="isHtml">Send as HTML</Label>
             </div>
@@ -261,7 +291,7 @@ export const EmailCompose: React.FC = () => {
             className="w-full"
           >
             {isLoading ? (
-              'Sending...'
+              "Sending..."
             ) : (
               <>
                 <Send className="h-4 w-4 mr-2" />

@@ -1,12 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { ScrollArea } from './ui/scroll-area';
-import { Separator } from './ui/separator';
-import { RefreshCw, History, CheckCircle, XCircle, Clock, Users } from 'lucide-react';
-import { EmailHistoryItem } from '@shared/api';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { ScrollArea } from "./ui/scroll-area";
+import { Separator } from "./ui/separator";
+import {
+  RefreshCw,
+  History,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Users,
+} from "lucide-react";
+import { EmailHistoryItem } from "@shared/api";
+import { toast } from "sonner";
 
 export const EmailHistory: React.FC = () => {
   const [emails, setEmails] = useState<EmailHistoryItem[]>([]);
@@ -15,16 +28,16 @@ export const EmailHistory: React.FC = () => {
   const fetchHistory = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/email-history');
+      const response = await fetch("/api/email-history");
       if (response.ok) {
         const data = await response.json();
         setEmails(data);
       } else {
-        toast.error('Failed to fetch email history');
+        toast.error("Failed to fetch email history");
       }
     } catch (error) {
-      toast.error('Network error occurred');
-      console.error('Error fetching email history:', error);
+      toast.error("Network error occurred");
+      console.error("Error fetching email history:", error);
     } finally {
       setIsLoading(false);
     }
@@ -34,39 +47,39 @@ export const EmailHistory: React.FC = () => {
     fetchHistory();
   }, []);
 
-  const getStatusIcon = (status: EmailHistoryItem['status']) => {
+  const getStatusIcon = (status: EmailHistoryItem["status"]) => {
     switch (status) {
-      case 'sent':
+      case "sent":
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'failed':
+      case "failed":
         return <XCircle className="h-4 w-4 text-destructive" />;
-      case 'pending':
+      case "pending":
         return <Clock className="h-4 w-4 text-yellow-500" />;
       default:
         return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
-  const getStatusVariant = (status: EmailHistoryItem['status']) => {
+  const getStatusVariant = (status: EmailHistoryItem["status"]) => {
     switch (status) {
-      case 'sent':
-        return 'default';
-      case 'failed':
-        return 'destructive';
-      case 'pending':
-        return 'secondary';
+      case "sent":
+        return "default";
+      case "failed":
+        return "destructive";
+      case "pending":
+        return "secondary";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -84,7 +97,9 @@ export const EmailHistory: React.FC = () => {
             onClick={fetchHistory}
             disabled={isLoading}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+            />
             Refresh
           </Button>
         </div>
@@ -107,19 +122,23 @@ export const EmailHistory: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         {getStatusIcon(email.status)}
-                        <h4 className="font-medium truncate">{email.subject}</h4>
-                        <Badge variant={getStatusVariant(email.status)} className="ml-auto">
+                        <h4 className="font-medium truncate">
+                          {email.subject}
+                        </h4>
+                        <Badge
+                          variant={getStatusVariant(email.status)}
+                          className="ml-auto"
+                        >
                           {email.status}
                         </Badge>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                         <Users className="h-3 w-3" />
                         <span>
-                          {email.to.length === 1 
-                            ? email.to[0] 
-                            : `${email.to.length} recipients`
-                          }
+                          {email.to.length === 1
+                            ? email.to[0]
+                            : `${email.to.length} recipients`}
                         </span>
                         <span>•</span>
                         <span>{formatDate(email.sentAt)}</span>
@@ -128,7 +147,11 @@ export const EmailHistory: React.FC = () => {
                       {email.to.length > 1 && (
                         <div className="flex flex-wrap gap-1 mb-2">
                           {email.to.slice(0, 3).map((recipient, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+                            <Badge
+                              key={idx}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {recipient}
                             </Badge>
                           ))}
@@ -147,7 +170,7 @@ export const EmailHistory: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   {index < emails.length - 1 && <Separator className="mt-4" />}
                 </div>
               ))}

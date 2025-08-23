@@ -19,7 +19,7 @@ export interface SendEmailRequest {
   subject: string;
   message: string;
   isHtml?: boolean;
-  template?: 'notification' | 'password-reset';
+  template?: "notification" | "password-reset";
 }
 
 export interface SendEmailResponse {
@@ -32,7 +32,7 @@ export interface EmailHistoryItem {
   id: string;
   to: string[];
   subject: string;
-  status: 'sent' | 'failed' | 'pending';
+  status: "sent" | "failed" | "pending";
   sentAt: string;
   error?: string;
 }
