@@ -18,5 +18,10 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Email API routes
+  app.post("/api/send-email", handleSendEmail);
+  app.get("/api/email-history", handleEmailHistory);
+  app.get("/api/email-test", handleEmailTest);
+
   return app;
 }
