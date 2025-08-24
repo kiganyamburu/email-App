@@ -43,7 +43,7 @@ email-App/
 
 1. Clone the repository:
 <p align="center">
-  <img src="public/placeholder.svg" alt="Email App Logo" width="200" />
+  <img src="public/email.png" alt="Email App Logo" width="200" />
 </p>
 
 # Email App
