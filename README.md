@@ -1,3 +1,52 @@
+# Project Structure
+
+The following is an overview of the main project structure:
+
+```
+email-App/
+├── client/
+│   ├── App.tsx
+│   ├── global.css
+│   ├── vite-env.d.ts
+│   ├── components/
+│   │   ├── EmailCompose.tsx
+│   │   ├── EmailHistory.tsx
+│   │   └── ui/
+│   │       ├── accordion.tsx
+│   │       ├── alert-dialog.tsx
+│   │       ├── ...
+│   ├── hooks/
+│   │   ├── use-mobile.tsx
+│   │   └── use-toast.ts
+│   ├── lib/
+│   │   ├── utils.ts
+│   │   └── utils.spec.ts
+│   └── pages/
+│       ├── EmailApp.tsx
+│       ├── Index.tsx
+│       └── NotFound.tsx
+├── public/
+│   ├── email.png
+│   ├── favicon.ico
+│   └── ...
+├── server/
+│   ├── index.ts
+│   ├── node-build.ts
+│   └── routes/
+│       ├── demo.ts
+│       └── email.ts
+├── shared/
+│   └── api.ts
+├── index.html
+├── package.json
+├── tsconfig.json
+├── tailwind.config.ts
+├── vite.config.ts
+├── vite.config.server.ts
+└── ...
+```
+
+This structure separates the client, server, and shared code for better maintainability.
 x # Email App
 
 A modern, full-stack email application built with React, TypeScript, Vite, and Tailwind CSS. This project features a client-side interface for composing, sending, and viewing email history, as well as a server-side API for handling email operations.
