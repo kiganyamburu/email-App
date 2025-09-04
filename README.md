@@ -90,7 +90,7 @@ This application allows users to compose, send, and view the history of emails t
 
 1. Clone the repository:
 <p align="center">
-  <img src="public/email.png" alt="Email App Logo" width="200" />
+  <img src="public/gmail.png" alt="Email App Logo" />
 </p>
 
 # Email App
